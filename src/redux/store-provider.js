@@ -1,5 +1,4 @@
 import {Provider} from "react-redux";
-import {createStore} from "redux";
 import ActionsFactories from "./actions-factories";
 import {configureStore} from "@reduxjs/toolkit";
 
