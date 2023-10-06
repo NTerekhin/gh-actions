@@ -30,7 +30,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
 
     - name: Deploy to AWS S3
-      run: aws s3 sync ./build s3://nigel-kds-client/${env.short_commit}/ --delete
+      run: aws s3 sync ./build s3://nigel-kds-client/${{env.short_commit}}/ --delete
        
 # aws s3 cp ./dist s3://back-office-client/${shortCommit}/ --recursive --acl public-read
 
