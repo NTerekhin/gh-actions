@@ -1,0 +1,27 @@
+name: Nigel CI/CD
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    env:
+      node_version: "18.19.1"
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Node.js $node_version
+      uses: actions/setup-node@v3
+      with:
+        node-version: $node_version
+
+    - name: build package
+      run: |
+          yarn
+          yarn build
+      
+
+
