@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       node_version: "v18.9.1"
+      short_commit: ${GITHUB_SHA::7}
 
     steps:
     - uses: actions/checkout@v4
@@ -21,6 +22,15 @@ jobs:
       run: |
           yarn
           yarn build
-      
+    - name: Config AWS
+      uses: ws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-east-1
+        aws-access-key-id: ${{ secret.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secret.AWS_SECRET_ACCESS_KEY}}
 
+    - name: Deploy to AWS S3
+      run: aws s3 sync ./build s3://nigel-kds-client/${env.short_commit}/ --delete
+       
+# aws s3 cp ./dist s3://back-office-client/${shortCommit}/ --recursive --acl public-read
 
