@@ -12,10 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Node.js $node_version
+    - name: Node.js ${{ env.node_version }}
       uses: actions/setup-node@v3
       with:
-        node-version: $node_version
+        node-version: ${{ env.node_version}}
 
     - name: build package
       run: |
