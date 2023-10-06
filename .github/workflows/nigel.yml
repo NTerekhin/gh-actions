@@ -26,8 +26,8 @@ jobs:
       uses: ws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-east-1
-        aws-access-key-id: ${{ secret.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secret.AWS_SECRET_ACCESS_KEY}}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
 
     - name: Deploy to AWS S3
       run: aws s3 sync ./build s3://nigel-kds-client/${env.short_commit}/ --delete
