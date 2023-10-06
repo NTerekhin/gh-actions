@@ -27,7 +27,7 @@ export default class CounterActionsFactory extends BaseFactory{
                 counter:state.counter
             }
         }
-        const dispatchMapper ={
+        const dispatchMapper={
             inc:IncrementAction.toDispatch(this.factoryName),
             dec:DecrementAction.toDispatch(this.factoryName),
             rnd:RandomAction.toDispatch(this.factoryName)
