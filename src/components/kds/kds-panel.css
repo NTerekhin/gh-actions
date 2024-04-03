@@ -1,0 +1,96 @@
+.kds-screen{
+    --spacing:1rem;
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 90px 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: "header header"
+                         "main main";
+}
+.kds-screen .kds-screen-bar{
+    grid-area: header;
+    margin:0;
+    padding:0;
+    height:67px;
+}
+.kds-screen .kds-screen-body{
+    grid-area: main;
+    width: 100%;
+    padding:10px;
+    margin-right:0;
+    margin-left: 0;
+    height:100%;
+    background: #6d6d6d;
+    overflow: hidden;
+}
+.course-card{
+display:inline-block;
+}
+.page{
+    --column-count: 20;
+    display:grid;
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    grid-template-rows: auto;
+    grid-gap:var(--spacing)
+ }
+.column {
+    margin:0;
+    box-sizing: border-box;
+    position: relative;
+    padding: 0;
+}
+.col, .col-xs-20{
+    grid-column: 1 / span 20;
+}
+.col-xs-1{
+    grid-column: auto;
+}
+.col-xs-2{
+    grid-column: auto / span 2;
+}
+.col-xs-3{
+    grid-column: auto / span 3;
+}
+.col-xs-4{
+    grid-column: auto / span 4;
+}
+.col-xs-5{
+    grid-column: auto / span 5;
+}
+
+.page-ex{
+    display: flex;
+    flex-wrap:nowrap;
+   /* margin-left: -15px;
+    margin-right: -15px;*/
+}
+.column-ex{
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+}
+.column-ex + .column-ex{
+    margin-left: 5px;
+}
+.panel{
+    background:#fff;
+    color:#333;
+    padding:5px;
+    position: relative;
+    margin-bottom:5px;
+}
+.panel ul{
+    list-style: none;
+    padding:0
+}
+.panel .panel-index{
+    position:absolute;
+    font-size: 5rem;
+    color:#85858557;
+    font-weight: bold;
+    top:50%;
+    left:70%;
+    transform: translate(-70%,-50%);
+    padding:10px;
+    z-index: 10001;
+}
