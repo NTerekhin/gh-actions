@@ -12,9 +12,9 @@ export default class KdsActionsFactory extends BaseFactory{
     getAction(action): Action {
             switch(action.type){
                 case ShiftLeftAction.TYPE:
-                    return new ShiftLeftAction(action.payload?.board);
+                    return new ShiftLeftAction();
                 case ShiftRightAction.TYPE:
-                    return new ShiftRightAction(action.payload?.board);
+                    return new ShiftRightAction(action.payload);
                 default:
                     return new KdsAction();
             }

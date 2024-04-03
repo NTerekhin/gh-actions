@@ -2,32 +2,27 @@ import KdsAction from "./kds-action";
 
 export default class ShiftRightAction extends KdsAction{
     static TYPE = 'SHIFT_RIGHT';
-    #board = null;
-    constructor(board) {
+    #payload = null;
+    constructor(payload) {
         super();
-        this.#board = board;
-        console.log(this.#board)
+        this.#payload = payload;
+        console.log(this.#payload)
     }
     execute(state) {
-        let total_pages = 0;
-        let shift_pages = 0;
-        if(this.#board) {
-            total_pages = this.#board.totalPages;
-            shift_pages = Math.ceil(this.#board.pages[state.counter].panels/8);
+        if(!this.#payload) return state;
+        const {total_pages,total_page_panels} = this.#payload;
+
+        if((state.shift_numbers+1) < Math.ceil(total_page_panels/8)) {
+            return {
+                ...state,
+                shift_numbers: state.shift_numbers + 1
+            };
         }
 
-        let isShift = state.shift_numbers+1<shift_pages
-        let counter = state.counter;
-        let shift_numbers = state.shift_numbers;
-        if(isShift)
-            shift_numbers = state.shift_numbers+1;
-        else {
-            counter = (state.counter + 1) > total_pages ? total_pages : (state.counter + 1)
-        }
         return  {
             ...state,
-            counter:counter,
-            shift_numbers: shift_numbers
+            counter:(state.counter + 1) > total_pages ? total_pages : (state.counter + 1),
+            shift_numbers: 0
         };
     }
 

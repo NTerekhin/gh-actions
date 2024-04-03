@@ -1,9 +1,10 @@
 import type {PanelNode} from "../panel-nodes/panel-node";
+import React from "react";
 
 export class Panel{
     #id:number;
-    #nodes:Array<PanelNode>=[];
-    #height:number = 50;
+    #panel_height=50;
+    #height:number = 0;
     #dishes:Array=[];
     #dish_height:number=25;
     #title:string='';
@@ -12,13 +13,7 @@ export class Panel{
     constructor(id,title) {
         this.#id = id;
         this.#title = title;
-    }
-    addNode(node:PanelNode){
-        this.#nodes.push(node);
-        this.#height+=node.height
-    }
-    get nodes(){
-        return this.#nodes;
+        this.#height = this.#panel_height;
     }
     get height(){
         return this.#height;
@@ -34,14 +29,10 @@ export class Panel{
     {
         return this.#title;
     }
-    addNodes(nodes:Array<PanelNode>)
-    {
-        this.#nodes = nodes;
-        this.#height = nodes.length*nodes[0].height;
-    }
+
     addDishes(dishes:Array){
         this.#dishes = dishes;
-        this.#height+=dishes.length*this.#dish_height;
+        this.#height= this.#panel_height+dishes.length*this.#dish_height;
     }
     get dishHeight()
     {
@@ -62,5 +53,18 @@ export class Panel{
     }
     get dishes(){
         return this.#dishes;
+    }
+    get panelHeight(){
+        return this.#panel_height;
+    }
+    showIndex(transparent_index,shift_numbers_index)
+    {
+        if (this.mainPanel === null || transparent_index.idx===0)
+            ++transparent_index.idx;
+
+        if (transparent_index.idx>=shift_numbers_index+8*shift_numbers_index && transparent_index.idx <= 8*(shift_numbers_index+1))
+            return <div className="panel-index">{transparent_index.idx}</div>;
+
+        return <></>;
     }
 }

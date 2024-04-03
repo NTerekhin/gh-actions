@@ -3,7 +3,7 @@ import type {Page} from "./page";
 
 export class Column{
     #column_height:number = 0;
-    #panels:Array<Panel>=[];
+    #panels:Array<int>=[];
     #page:Page =null;
     constructor(page:Page) {
         this.#page = page;

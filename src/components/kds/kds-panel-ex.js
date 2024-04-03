@@ -281,8 +281,6 @@ const coursesList = {
 const KdsPanelEx = (props)=>{
     const boardRef = useRef(null);
     const [screenBoard, setScreenBoard] = useState(null);
-    const [shiftNumbers,setShiftNumbers] = useState(0);
-
 
     useEffect(()=>{
         console.log("init");
@@ -300,46 +298,28 @@ const KdsPanelEx = (props)=>{
 
     }
 
-    const clickGoRight = (board:Board)=>{
-        if(board==null)
-            return;
-        const shift_total = Math.ceil(board.pages[props.counter].panels/8)
-
-        const isShift = (shiftNumbers+1)<shift_total
-
-        if(isShift)
-            setShiftNumbers(shiftNumbers+1)
-        else {
-            setShiftNumbers(0)
-            props.shiftRight(board?.totalPages);
-        }
+    const prevPage = ()=>{
+        props.shiftLeft();
     }
+    const nextPage = (board:Board,page_num)=>{
+        props.shiftRight({total_pages:board?.totalPages,total_page_panels:board?.pages[page_num].panels});
+    }
+
     const renderBoard = (page:number=0,shift_numbers:number=0)=>{
 
         if(!screenBoard) return <></>;
 
         page = page>screenBoard.totalPages?screenBoard.totalPages:(page<0?0:page);
-        let board_page = screenBoard.pages[page];
 
-        const shoePanelIndex= (panel,index_object,shift)=> {
-
-            if (panel.mainPanel === null || index_object.idx===0)
-                ++index_object.idx;
-
-            if (index_object.idx>=shift+8*shift && index_object.idx <= 8*(shift+1))
-                return <div className="panel-index">{index_object.idx}</div>;
-
-            return <></>;
-        }
         let index = {idx: 0}
         return (
             <div className="page-ex" key="1">
             {
-                    board_page.columns.map((column, idx) => {
+                screenBoard.pages[page].columns.map((column, idx) => {
                 return <div className="column-ex" key={idx}>
                     {column.panels.map((panel,i)=>{
                         return <div className="panel" key={i}>
-                            {shoePanelIndex(panel,index,shift_numbers)}
+                            {panel.showIndex(index,shift_numbers)}
                             <ul key={"panel-"+i} style={{marginBottom: '5px'}}>
                                 <li key={"panel-title-"+i} style={{height: panel.dishHeight, fontSize: '0.8rem'}}
                                     className="panel-title" >{panel.title}</li>
@@ -359,17 +339,15 @@ const KdsPanelEx = (props)=>{
 
         <div className="kds-screen" id={crypto.randomUUID()}>
             <div className="kds-status-bar" id={crypto.randomUUID()}>
-                <button onClick={()=>props.shiftLeft({board:screenBoard})} className="btn bt-primary btn-lg">Prev</button>
-                <button onClick={()=>props.shiftRight({board:screenBoard})} className="btn bt-primary btn-lg">Next</button>
-
-
+                <button onClick={prevPage} className="btn bt-primary btn-lg">Prev</button>
+                <button onClick={()=>nextPage(screenBoard,props.counter)} className="btn bt-primary btn-lg">Next</button>
                 <ul>
                     <li><label>Current Page:</label><span>{props.counter + 1}</span></li>
                     <li><label>Total Pages:</label><span>{(screenBoard ? screenBoard.totalPages : 0) + 1}</span></li>
                 </ul>
             </div>
             <div className="kds-screen-body" ref={boardRef} key={crypto.randomUUID()}>
-                {renderBoard(props.counter,shiftNumbers)}
+                {renderBoard(props.counter,props.shift_numbers)}
             </div>
         </div>
     )
