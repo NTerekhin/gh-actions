@@ -1,7 +1,14 @@
 //import Counter from "./counter";
 import './app.css';
-import KdsPanelEx from "./kds/kds-panel-ex";
+/*import Counter from "./counter";*/
+import {TipsInputField} from "./tips/tips-input-field";
+
 
 export const App = ()=>{
-   return (<KdsPanelEx/>);
+   return (
+       <>
+      {/* <Counter/>*/}
+       <TipsInputField/>
+          </>
+   );
 }

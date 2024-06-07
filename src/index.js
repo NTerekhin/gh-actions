@@ -4,12 +4,15 @@ import ReactDOM from 'react-dom/client';
 
 import {StoreProvider} from "./redux/store-provider";
 import {App} from "./components/app";
+import {ModalDialogProvider} from "./components/dialog/provider/modal-dialog-provider";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <StoreProvider>
-        <App />
+        <ModalDialogProvider>
+            <App />
+        </ModalDialogProvider>
     </StoreProvider>
 
 );

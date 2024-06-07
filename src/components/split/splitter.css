@@ -1,0 +1,7 @@
+.course{
+    padding:5px;
+    background: #6d6d6d;
+}
+.course + .course{
+    margin-top:5px;
+}
