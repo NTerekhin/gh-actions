@@ -353,5 +353,8 @@ export class SelectionHistoryService{
             })
             .filter(Boolean);
     }
+    addTool(){
+        //TODO add code here
+    }
 
 }
