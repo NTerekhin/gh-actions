@@ -42,12 +42,12 @@ jobs:
             tag_version=$(echo "$latest_tag" | tr -d 'v.')
             branch_version=$(echo "$base_branch_tag" | tr -d 'v.')
           
-          if [ "$tag_version" -le "$branch_version" ]; then
-             echo "OK"
-          else
-            echo "Error: Tag version ($latest_tag) is greater than branch tag ($base_branch_tag)."
-            exit 1
-          fi
+            if [ "$tag_version" -le "$branch_version" ]; then
+               echo "OK"
+            else
+               echo "Error: Tag version ($latest_tag) is greater than branch tag ($base_branch_tag)."
+               exit 1
+            fi
               
 
       - name: Allow merge
