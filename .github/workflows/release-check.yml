@@ -28,7 +28,7 @@ jobs:
       - name: Get base branch tag
         id: get_base_branch_tag
         run: | 
-            if [ -z "$(git tag --merged ${{github.base_ref}})" ]; then
+            if [ -z "$(git tag --merged origin/${{github.base_ref}})" ]; then
               echo "Error: The release branch does not have an associated tag. This may indicate it is not a release branch or that a tag is missing"
               exit 1
             fi
