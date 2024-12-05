@@ -26,10 +26,10 @@ jobs:
             echo "Latest tag: $latest_tag"
             echo "latest_tag=$latest_tag" >> $GITHUB_ENV
 
-      - name: Get brnach name
+      - name: Get branch name
         id: get_branch_name
         run: | 
-            branch_name="${{github.base_ref}}"
+            branch_name=$(git describe --tags $(git merge-base ${{github.base_ref}} HEAD)) 2>/dev/null || echo "none")
             echo "Branch name: $branch_name"
             echo "branch_name=$branch_name" >> $GITHUB_ENV
 
