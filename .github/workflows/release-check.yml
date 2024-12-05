@@ -11,6 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check does brnach has tags
+        run: |
+          if [ -z "$(git tag)" ]; then
+            echo "Error: No tags"
+            exit 1
+          fi
+
       - name: Check PR
         run: |
             latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
