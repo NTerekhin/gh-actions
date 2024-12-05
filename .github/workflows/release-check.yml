@@ -30,7 +30,7 @@ jobs:
       - name: Get branch name
         id: get_branch_name
         run: | 
-            branch_name=$(git describe --tags $(git ref-list --tags --branches=${{github.base_ref}} --max-count=1) 2>/dev/null || echo "none")
+            branch_name=$(git describe --tags $(git rev-list --tags --branches=${{github.base_ref}} --max-count=1) 2>/dev/null || echo "none")
             echo "Branch name: $branch_name"
             echo "branch_name=$branch_name" >> $GITHUB_ENV
 
