@@ -30,7 +30,7 @@ jobs:
       - name: Get branch name
         id: get_branch_name
         run: | 
-            branch_name=$(git describe --tags $(git merge-base origin/${{github.base_ref}} HEAD) 2>/dev/null || echo "none")
+            branch_name=$(git describe --tags --abbrev=0 $(git merge-base origin/${{github.base_ref}} HEAD) 2>/dev/null || echo "none")
             echo "Branch name: $branch_name"
             echo "branch_name=$branch_name" >> $GITHUB_ENV
 
