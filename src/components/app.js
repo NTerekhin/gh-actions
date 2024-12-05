@@ -1,14 +1,7 @@
-//import Counter from "./counter";
 import './app.css';
-/*import Counter from "./counter";*/
-import {TipsInputField} from "./tips/tips-input-field";
+import {MenuMapper} from "./menu-mapper/menu-mapper";
 
 
 export const App = ()=>{
-   return (
-       <>
-      {/* <Counter/>*/}
-       <TipsInputField/>
-          </>
-   );
+    return (<MenuMapper/>)
 }
