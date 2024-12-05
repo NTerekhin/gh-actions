@@ -14,25 +14,41 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Check does brnach has tags
+      - name: Get branch tag
         run: |
-          if [ -z "$(git tag)" ]; then
-            echo "Error: seems this branch was not created from release branch!!!!"
-            exit 1
-          fi
-
-      - name: Check PR
-        run: |
+            if [ -z "$(git tag)" ]; then
+              echo "Error: not tags seems this branch was not created from release branch!!!!"
+              exit 1
+            fi
+          
             latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) 2> /dev/null || echo "v0.0.0")
             echo "Latest tag: $latest_tag"
             echo "latest_tag=$latest_tag" >> $GITHUB_ENV
 
-      - name: Get branch name
-        id: get_branch_name
+      - name: Get base branch tag
+        id: get_base_branch_tag
         run: | 
-            branch_name=$(git describe --tags $(git rev-list --tags --branches=${{github.base_ref}} --max-count=1) 2>/dev/null || echo "none")
-            echo "Branch name: $branch_name"
-            echo "branch_name=$branch_name" >> $GITHUB_ENV
+            if [ -z "$(git tag --merged ${{github.base_ref}})" ]; then
+              echo "Error: The release branch does not have an associated tag. This may indicate it is not a release branch or that a tag is missing"
+              exit 1
+            fi
+          
+            base_branch_tag=$(git describe --tags $(git rev-list --tags --branches=${{github.base_ref}} --max-count=1) 2>/dev/null || echo "none")
+            echo "Branch name: $base_branch_tag"
+            echo "base_branch_tag=$base_branch_tag" >> $GITHUB_ENV
+
+      - name: Compare tags
+        run: | 
+            tag_version=$(echo "$latest_tag" | tr -d 'v.')
+            branch_version=$(echo "$base_branch_tag" | tr -d 'v.')
+          
+          if [ "$tag_version" -le "$branch_version" ]; then
+             echo "OK"
+          else
+            echo "Error: Tag version ($latest_tag) is greater than branch tag ($base_branch_tag)."
+            exit 1
+          fi
+              
 
       - name: Allow merge
         run: echo "Branch is valid to be merge in release"
