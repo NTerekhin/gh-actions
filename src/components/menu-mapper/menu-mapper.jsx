@@ -7,5 +7,6 @@ export const MenuMapper =()=>{
     const selectionHistory =  selectionHistoryService.build(1658);
 
     console.log(selectionHistory);
+    console.log("TOOLS");
     return (Menu.menu.id);
 }
