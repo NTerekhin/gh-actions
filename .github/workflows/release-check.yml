@@ -13,21 +13,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: List all tags
-        run: git tag
-
       - name: Check does brnach has tags
         run: |
           if [ -z "$(git tag)" ]; then
-            echo "Error: No tags"
+            echo "Error: seems this branch was not created from release branch!!!!"
             exit 1
           fi
 
       - name: Check PR
         run: |
-            latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
-            echo $latest_tag
-            current_branch=$(git rev-parse --abbrev-ref HEAD)
+            latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) 2> /dev/null || echo "v0.0.0")
+            echo "Latest tag: $latest_tag"
+            echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+
+      - name: Get brnach name
+        id: get_branch_name
+        run: | 
+            branch_name=$(echo "${{github.ref}}" | sed 's/refs\/heads///')
+            echo "Branch name: $branch_name"
+            echo "branch_name=$branch_name" >> $GITHUB_ENV
 
       - name: Allow merge
         run: echo "Branch is valid to be merge in release"
