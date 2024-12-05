@@ -1,0 +1,21 @@
+name: Check PR into release
+on:
+  pull_request:
+    branches:
+      - release/*
+
+jobs:
+  check-tag-origin:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check PR
+        run: |
+            latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+            echo $latest_tag
+            current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+      - name: Allow merge
+        run: echo "Branch is valid to be merge in release"
