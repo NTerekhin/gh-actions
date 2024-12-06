@@ -16,9 +16,9 @@ jobs:
 
       - name: Get branch tag
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null)
-          if [ -z "$latest_tag" ]; then
-            echo "Error: not tags seems this branch was not created from release branch!!!!"
+          latest_tag=$(git describe --tags --abbrev=0 origin/${{github.head_ref}} 2>/dev/null)
+          if [ -z "$latest_tag"] || [[ "$latest_tag" == r* ]]; then
+            echo "Error: tag ($latest_tag) is not valid seems this branch was not created from release branch!!!!"
             exit 1
           fi
           
