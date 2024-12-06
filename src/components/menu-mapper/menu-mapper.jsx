@@ -11,5 +11,6 @@ export const MenuMapper =()=>{
     console.log("FEATURE-33")
     console.log("HOTFIX-7777")
     console.log("FEATURE-34")
+    console.log("HOTFIX-main")
     return (Menu.menu.id);
 }
