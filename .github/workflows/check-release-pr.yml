@@ -1,4 +1,4 @@
-ame: Check PR into release
+name: Check PR into release
 on:
   pull_request:
     branches:
