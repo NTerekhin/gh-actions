@@ -1,0 +1,57 @@
+name: Check hotfix PR into main
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-tag-origin:
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'hotfix/') #do not know do we need this condition for this github action ????
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+
+      - name: Get branch tag
+        run: |
+          hotfix_branch_tag=$(git tag --merged origin/${{github.head_ref}} | grep -E "^r[1-9]+\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1)
+          if [ -z "$hotfix_branch_tag" ]; then
+            echo "Error: tag ($hotfix_branch_tag) is not valid seems this branch was not created from release branch!!!!"
+            exit 1
+          fi
+          
+          echo "Merg branch tag: $hotfix_branch_tag"
+          echo "hotfix_branch_tag=$hotfix_branch_tag" >> $GITHUB_ENV
+
+      - name: Get release branch tag
+        id: get_release_branch_tag
+        run: |
+          main_branch_last_release_tag=$(git tag --merged origin/${{github.base_ref}} | grep -E "^r[1-9]+\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1)
+          if [ -z "$main_branch_last_release_tag" ]; then
+            echo "Error: The main branch does not have an associated tag."
+            exit 1
+          fi
+          
+          echo "Main branch last release tag: $main_branch_last_release_tag"
+          echo "main_branch_last_release_tag=$main_branch_last_release_tag" >> $GITHUB_ENV
+
+      - name: Compare tags
+        run: |
+          
+          hotfix_branch_version=$(echo "$hotfix_branch_tag" | tr -d 'r.')
+          main_branch_last_release_version=$(echo "$main_branch_last_release_tag" | tr -d 'r.')
+          
+          if [ "$hotfix_branch_version" -ge "$main_branch_last_release_version" ]; then
+             echo "OK"
+          else
+             echo "Error: Hotfix Tag ($hotfix_branch_tag) is less than release branch version tag: ($main_branch_last_release_tag)!!!"
+             exit 1
+          fi
+
+
+      - name: Allow merge
+        run: echo "Branch is valid to be merge in main"

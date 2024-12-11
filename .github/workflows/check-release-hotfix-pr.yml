@@ -1,0 +1,57 @@
+name: Check hotfix PR into release
+on:
+  pull_request:
+    branches:
+      - release/*
+
+jobs:
+  check-tag-origin:
+    runs-on: ubuntu-latest
+    #if: startsWith(github.head_ref, 'hotfix/')
+    #do not know do we need to add condition that it has to be run only when we do PR with hotfix/* branch or for every branch  ????
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Get branch tag
+        run: |
+          hotfix_branch_tag=$(git tag --merged origin/${{github.head_ref}} | grep -E "^v[1-9]+\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1)
+          if [ -z "$merg_branch_tag" ]; then
+            echo "Error: tag ($hotfix_branch_tag) is not valid seems this branch was not created from release branch!!!!"
+            exit 1
+          fi
+          
+          echo "Merg branch tag: $hotfix_branch_tag"
+          echo "hotfix_branch_tag=$hotfix_branch_tag" >> $GITHUB_ENV
+
+      - name: Get release branch tag
+        id: get_release_branch_tag
+        run: |
+          release_branch_tag=$(git tag --merged origin/${{github.base_ref}} | grep -E "^v[1-9]+\.[0-9]+\.[0-9]+$" | sort -V | head -n 1)
+          if [ -z "$release_branch_tag" ]; then
+            echo "Error: The release branch does not have an associated tag. This may indicate it is not a release branch or that a tag is missing"
+            exit 1
+          fi
+          
+          echo "Release branch tag: $base_branch_tag"
+          echo "release_branch_tag=$release_branch_tag" >> $GITHUB_ENV
+
+      - name: Compare tags
+        run: |
+          
+          hotfix_branch_version=$(echo "$hotfix_branch_tag" | tr -d 'v.')
+          release_branch_version=$(echo "$release_branch_tag" | tr -d 'v.')
+          
+          if [ "$hotfix_branch_version" -ge "$release_branch_version" ]; then
+             echo "OK"
+          else
+             echo "Error: Hotfix Tag ($hotfix_branch_tag) is less than release branch version tag: ($release_branch_tag)!!!"
+             exit 1
+          fi
+
+
+      - name: Allow merge
+        run: echo "Branch is valid to be merge in release"
